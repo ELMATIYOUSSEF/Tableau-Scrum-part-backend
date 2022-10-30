@@ -268,8 +268,7 @@
 							<!-- TO DO TASKS HERE -->
 							<?php
 								//PHP CODE HERE
-								$statusT = 'To Do';
-								getTasks($connection ,$statusT);
+								getTasks($connection ,'To Do');
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -290,8 +289,8 @@
 							<!-- IN PROGRESS TASKS HERE -->
 							<?php
 								//PHP CODE HERE
-								$statusT = 'In Progress';
-								getTasks($connection,$statusT);
+								$statusT = ;
+								getTasks($connection,'In Progress');
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -312,8 +311,7 @@
 							<!-- DONE TASKS HERE -->
 							<?php
 								// //PHP CODE HERE
-								$statusT = 'Done';
-								getTasks($connection,$statusT);
+								getTasks($connection,'Done');
 								//DATA FROM getTasks() FUNCTION
 							?>
 						</div>
@@ -391,8 +389,6 @@
 					</div>
 					<div class="modal-footer">
 						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
-						<button type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn">Delete</a>
-						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</a>
 						<button type="submit" name="save" class="btn btn-primary task-action-btn" id="task-save-btn">Save</button>
 					</div>
 				</form>

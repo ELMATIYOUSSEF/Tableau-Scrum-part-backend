@@ -4,7 +4,9 @@
     $_SERVER ='localhost';
     $_Root ='root';
     $_Password='';
-    $_DataBase ='TableBord';
+  //  $_DataBase ='TableBord';
+    //in my dell
+    $_DataBase ='youcodescrumborad';
 
     //database connection 
     $connection = mysqli_connect($_SERVER,$_Root,$_Password,$_DataBase);

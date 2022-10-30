@@ -1,16 +1,57 @@
 <?php 
-     function check()
-     {
-
-     }
-    function update()
+     // function update 
+    if (isset($_POST['update']))
+    {
+        require "database.php";
+        //CODE HERE
+		$id = $_GET['id'];
+        $title =$_POST['title'];
+        $type_id =intval($_POST['task-type']);
+        $priority =intval ($_POST['priority']);
+        $status_id =intval($_POST['status']);
+        $task_datetime =$_POST['task_datetime'];
+        $description =$_POST['description'];
+        //SQL UPDATE
+        $sql = "UPDATE tasks
+        SET title = '$title', type_id =$type_id,priority_id = $priority,status_id = $status_id,task_datetime = '$task_datetime', description = '$description'
+        WHERE tasks.id = $id";
+          mysqli_query($connection, $sql);
+          $connection->close();
+        $_SESSION['message'] = "Task has been updated successfully !";
+		header('location: index.php');
+		
+    }
+	//routing de function delete
+	if (isset($_POST['delete']))
+    {
+		// call function delete
+		deleteTask() ;
+	}
+	// function delete 
+	function deleteTask()
+        {
+			require "database.php";
+			$id = $_GET['id'];
+			//SQL DELETE
+			$Quiry = "delete from tasks where tasks.id = $id";
+			//CODE HERE
+			mysqli_query($connection, $Quiry) ;
+			$connection->close();
+			$_SESSION['message'] = "Task has been deleted successfully !";
+			header('location: index.php');
+			
+       
+        }
+      // function remplaire form pour up dating tasks 
+    function RemplaireFormUpDate()
     {
         require "database.php";
         if (isset($_GET['id']))
             {
                 $id = $_GET['id'];
+				// SQL SELECT
                 $sql = "SELECT tasks.id as id , tasks.title as title, tasks.task_datetime as dateT , tasks.description as descpT , types.name as typeTask , statuses.id as statusT ,statuses.name as statusTName , priorities.id as PrioritieT , priorities.name as PrioritieTName from (((tasks INNER JOIN types ON tasks.type_id = types.id ) INNER JOIN statuses on statuses.id = tasks.status_id ) INNER JOIN priorities on priorities.id = tasks.priority_id ) WHERE tasks.id = $id";
-
+				 //CODE HERE
                 $result = $connection->query($sql);
                 $result = $result->fetch_assoc();
                 
@@ -20,7 +61,9 @@
             } 
             else echo ' id is null';
     }
-    $result = update();
+    $result = RemplaireFormUpDate();
+	
+
      ?>
 <!DOCTYPE html>
 <html lang="en" >
@@ -41,10 +84,9 @@
 <body>
 	<!-- TASK MODAL -->
 <
-				<form action="scripts.php" method="POST" >
+				<form action="" method="POST" >
 					<div class="modal-header">
 						<h4 class="modal-title">Up Date</h4>
-						<!-- <a href="#" class="btn-close" data-bs-dismiss="modal"></a> -->
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
@@ -83,8 +125,7 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" value="<?php echo $result['priority_id'] ?>"  name="priority" id="task-priority"required>
-									<option value="<?php echo $result['PrioritieT'] ?>"  ><?php echo $result['PrioritieTName'] ?></option>
+								<select class="form-select" name="priority" id="task-priority" required>
 									<option value="1">Low</option>
 									<option value="2">Medium</option>
 									<option value="3">High</option>
@@ -93,8 +134,7 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" value="<?php echo $result['statusT'] ?>"  name="status" id="task-status" required>
-                                <option value="<?php echo $result['statusT'] ?>"><?php echo $result['statusTName'] ?></option>
+								<select class="form-select"  name="status" id="task-status" required>
 									<option value="1">To Do</option>
 									<option value="2">In Progress</option>
 									<option value="3">Done</option>
@@ -111,9 +151,10 @@
 						
 					</div>
 					<div class="modal-footer">
-						<a href="#" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
-						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</a>
-						<button type="submit" name="save" class="btn btn-primary task-action-btn" id="task-save-btn">Save</button>
+						<a href="./index.php" class="btn btn-white" data-bs-dismiss="modal">Cancel</a>
+						<button type="submit" name="delete" class="btn btn-danger task-action-btn" id="task-delete-btn">Delete</button>
+						<button type="submit" name="update" class="btn btn-warning task-action-btn" id="task-update-btn">Update</button>
+
 					</div>
 				</form>	
 	<!-- ================== BEGIN core-js ================== -->
@@ -121,10 +162,15 @@
 	<script src="assets/js/app.min.js"></script>
 	<!-- ================== END core-js ================== -->
 	<script src="scripts.js"></script>
-
-	<script>
-		//reloadTasks();
-	</script>
+	<?php
+	// j'ai utilise js pour controle la valuer de priorite est statuse a la form up date 
+	echo "
+				<script>
+					document.getElementById('task-priority').value = ".(int)$result['PrioritieT']."
+					document.getElementById('task-status').value = ".(int)$result['statusT'].";
+				</script>
+				";
+	?>
 
 </body>
 </html>
